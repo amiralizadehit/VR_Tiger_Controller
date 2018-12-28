@@ -1529,7 +1529,7 @@ ModelImporter:
     armStretch: 0.05
     legStretch: 0.05
     feetSpacing: 0
-    rootMotionBoneName: 
+    rootMotionBoneName: TSMG_Rig
     hasTranslationDoF: 0
     hasExtraRoot: 0
     skeletonHasParents: 0
