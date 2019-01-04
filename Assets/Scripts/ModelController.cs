@@ -7,23 +7,24 @@ using UnityEngine.Networking;
 
 public class ModelController : MonoBehaviour
 {
-
-
-
-    
-
+    public float totalVolume;
+    public float totalMass;
+    public float modelDamper;
+    public float modelSpring;
     public List<Controller> controllers;
+
+
     private GameObject[] bones;
-
-
     private Rigidbody body;
     private HingeJoint hinge;
+    private CapsuleCollider collider;
     private bool isInitialized;
+
 
     void Awake()
     {
         bones = GameObject.FindGameObjectsWithTag("Bone");
-        if(controllers.Count==0)
+        if (controllers.Count == 0)
             controllers = new List<Controller>(bones.Length);
         else
         {
@@ -34,7 +35,6 @@ public class ModelController : MonoBehaviour
 
     void Start()
     {
-
         if (!isInitialized)
         {
             foreach (var bone in bones)
@@ -43,36 +43,26 @@ public class ModelController : MonoBehaviour
                 {
                     body = bone.GetComponent<Rigidbody>();
                     hinge = bone.GetComponent<HingeJoint>();
+                    collider = bone.GetComponent<CapsuleCollider>();
+
                     controllers.Add(new Controller()
                     {
                         name = bone.name,
-                        rigidbody = new RigidBodyController()
-                        {
-                            mass = body.mass
-                        },
-                        hinge = new HingJointController()
-                        {
-                            axis = hinge.axis,
-
-                            useLimits = hinge.useLimits,
-                            limitMin = hinge.limits.min,
-                            limitMax = hinge.limits.max,
-
-                            useSpring = hinge.useSpring,
-                            damper = hinge.spring.damper,
-                            spring = hinge.spring.spring,
-                            targetPosition = hinge.spring.targetPosition
-                        },
+                        targetPosition = (hinge!=null) ? hinge.spring.targetPosition : 0,
+                        isRoot = (hinge == null),
                         bone = bone
                     });
+
+                    totalVolume += (float) (Math.PI * Math.Pow(collider.radius, 2) *
+                                            (4f / 3f * collider.radius + collider.height));
                 }
-            }    
-        }    
+            }
+        }
     }
 
     void Update()
     {
-        UpdateModel();   
+        UpdateModel();
     }
 
 
@@ -80,27 +70,20 @@ public class ModelController : MonoBehaviour
     {
         foreach (var controller in controllers)
         {
-            controller.bone.GetComponent<Rigidbody>().mass = controller.rigidbody.mass;
-            controller.bone.GetComponent<HingeJoint>().axis = controller.hinge.axis;
-            JointLimits limit = new JointLimits()
+            var radius = controller.bone.GetComponent<CapsuleCollider>().radius;
+            var height = controller.bone.GetComponent<CapsuleCollider>().height;
+            if (!controller.isRoot) // we don't have hing in root bone
             {
-                max = controller.hinge.limitMax,
-                min = controller.hinge.limitMin,
-                bounceMinVelocity = 0.2f,
-                bounciness = 0
-            };
-            controller.bone.GetComponent<HingeJoint>().limits = limit;
-            controller.bone.GetComponent<HingeJoint>().useLimits = controller.hinge.useLimits;
-
-
-            JointSpring spring = new JointSpring()
-            {
-                spring = controller.hinge.spring,
-                damper = controller.hinge.damper,
-                targetPosition = controller.hinge.targetPosition
-            };
-            controller.bone.GetComponent<HingeJoint>().spring = spring;
-            controller.bone.GetComponent<HingeJoint>().useSpring = controller.hinge.useSpring;
+                JointSpring spring = new JointSpring()
+                {
+                    spring = modelSpring,
+                    damper = modelDamper,
+                    targetPosition = controller.targetPosition,
+                };
+                controller.bone.GetComponent<HingeJoint>().spring = spring;
+            }
+            controller.bone.GetComponent<Rigidbody>().mass =
+                totalMass * (float) (Math.PI * Math.Pow(radius, 2) * (4f / 3f * radius + height)) / totalVolume;
         }
     }
 }
@@ -108,33 +91,11 @@ public class ModelController : MonoBehaviour
 [System.Serializable]
 public class Controller
 {
-    public string name;
-    public RigidBodyController rigidbody;
-    public HingJointController hinge;
+    [HideInInspector] public string name;
 
     public GameObject bone; //reference
 
-}
+    [HideInInspector] public bool isRoot;
 
-[System.Serializable]
-public class RigidBodyController
-{
-    public float mass;
-}
-
-[System.Serializable]
-public class HingJointController
-{
-    public Vector3 axis;
-
-    public bool useLimits;
-    public float limitMin;
-    public float limitMax;
-
-    public bool useSpring;
-    public float damper;
-    public float spring;
     public float targetPosition;
 }
-
-
