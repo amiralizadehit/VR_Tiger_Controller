@@ -17,29 +17,41 @@ public class ModelController : MonoBehaviour
     public float modelSpring;
 
     public bool useCustomValues;
+
     //public List<Controller> controllers;
 
     [Header("Body Parts")]
     [NamedArrayAttribute(new string[]
     {
-        "Waist",
-        "Neck",
-        "Right Leg Toe",
-        "Right Leg Shin",
-        "Right Leg Thigh",
-        "Right Hand Toe",
-        "Right Hand Forearm",
-        "Right Hand Arm",
-        "Left Leg Toe",
-        "Left Leg Shin",
-        "Left Leg Thigh",
-        "Left Hand Toe",
-        "left Hand Forearm",
-        "Left Hand Arm",
-        "Left Leg Upper",
-        "Right Leg Upper"
+        "Waist (0)",
+        "Neck (1)",
+        "Right Leg Toe (2)",
+        "Right Leg Shin (3)",
+        "Right Leg Thigh (4)",
+        "Right Hand Toe (5)",
+        "Right Hand Forearm (6)",
+        "Right Hand Arm (7)",
+        "Left Leg Toe (8)",
+        "Left Leg Shin (9)",
+        "Left Leg Thigh (10)",
+        "Left Hand Toe (11)",
+        "Left Hand Forearm (12)",
+        "Left Hand Arm (13)",
+        "Left Leg Upper (14)",
+        "Right Leg Upper (15)"
     })]
     public float[] parts;
+
+    [Header("Actions")]
+    public bool useActionValues;
+    [NamedArrayAttribute(new string[]
+    {
+        "Moving Hands",
+        "Moving Legs",
+    })]
+    public float[] actions;
+
+
 
 
     public GameObject root;
@@ -92,6 +104,28 @@ public class ModelController : MonoBehaviour
 
     private void UpdateModel()
     {
+        if (useActionValues)
+        {
+
+            parts[6] = actions[0];
+            parts[7] = actions[0];
+            parts[8] = actions[0];
+            parts[11] = actions[0];
+            parts[12] = actions[0];
+            parts[13] = actions[0];
+
+            parts[2] = actions[0];
+            parts[3] = actions[0];
+            parts[4] = actions[0];
+            parts[15] = actions[0];
+            parts[8] = actions[0];
+            parts[9] = actions[0];
+            parts[10] = actions[0];
+            parts[14] = actions[0];
+
+        }
+   
+
         for (int i = 0; i < bones.Length; i++)
         {
             JointSpring spring = new JointSpring()
