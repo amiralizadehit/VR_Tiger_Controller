@@ -60,6 +60,8 @@ namespace Valve.VR
 
             var pose = new SteamVR_Utils.RigidTransform(poses[i].mDeviceToAbsoluteTracking);
 
+            
+
             if (origin != null)
             {
                 transform.position = origin.transform.TransformPoint(pose.pos);

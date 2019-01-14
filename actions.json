@@ -36,6 +36,10 @@
       "requirement": "optional"
     },
     {
+      "name": "/actions/default/in/Plant",
+      "type": "boolean"
+    },
+    {
       "name": "/actions/default/out/Haptic",
       "type": "vibration"
     },
@@ -414,7 +418,8 @@
       "/actions/htc_viu/in/viu_axis_1xy": "Axis1 X&Y",
       "/actions/htc_viu/in/viu_axis_2xy": "Axis2 X&Y (Thumbstick)",
       "/actions/htc_viu/in/viu_axis_3xy": "Axis3 X&Y",
-      "/actions/htc_viu/in/viu_axis_4xy": "Axis4 X&Y"
+      "/actions/htc_viu/in/viu_axis_4xy": "Axis4 X&Y",
+      "/actions/default/in/Plant": "Plant"
     }
   ]
 }
