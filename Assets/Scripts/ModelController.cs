@@ -134,7 +134,8 @@ public class ModelController : MonoBehaviour
                 damper = modelDamper,
                 targetPosition = parts[i]
             };
-            bones[i].GetComponent<HingeJoint>().spring = spring;
+            if(useActionValues)
+                bones[i].GetComponent<HingeJoint>().spring = spring;
         }
     }
 

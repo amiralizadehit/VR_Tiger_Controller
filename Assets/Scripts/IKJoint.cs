@@ -6,8 +6,12 @@ public class IKJoint : MonoBehaviour
 {
 
     public HingeJoint hing;
+    public float offset = 0;
 
     [SerializeField] public Mesh Cylinder;
+
+    private Transform goal;
+    private Transform endEffector;
 
 
 	void Start ()
@@ -17,9 +21,38 @@ public class IKJoint : MonoBehaviour
     }
 	
 	// Update is called once per frame
-	void Update () {
-        var d = transform.TransformPoint(hing.anchor);
-        //(hing.angle);
+	void Update ()
+    {
+        if (goal!=null && endEffector!=null)
+        {
+            var position = transform.TransformPoint(hing.anchor);
+            var toGoal = (goal.position - position).normalized;
+            var toEF = (endEffector.position - position).normalized;
+            var theta = Mathf.Acos(Vector3.Dot(toGoal, toEF)) * Mathf.Rad2Deg;
+
+            var crossSign = Mathf.Sign(Vector3.Cross(toGoal,toEF).x);
+            print(theta);
+
+            var jointSpring = new JointSpring()
+            {
+                spring = hing.spring.spring,
+                damper = hing.spring.damper,
+                targetPosition = -crossSign * theta
+            };
+            hing.spring = jointSpring;
+            //print(theta);
+        }
+
+    }
+
+    public void SetGoal(Transform goal)
+    {
+        this.goal = goal;
+    }
+
+    public void SetEffector(Transform endEffector)
+    {
+        this.endEffector = endEffector;
     }
 
     private void OnDrawGizmos()
