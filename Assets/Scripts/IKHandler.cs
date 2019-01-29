@@ -7,27 +7,26 @@ public class IKHandler : MonoBehaviour
     public Transform goal;
     public Transform endEffector;
 
-    public List<IKJoint> joints;
+    [SerializeField] public List<IKJoint> joints;
 
-	// Use this for initialization
-	void Awake ()
+    private float magnitude;
+
+    // Use this for initialization
+    void Awake()
     {
-        foreach (var ikJoint in joints)
-        {
-            ikJoint.SetEffector(endEffector);
-            ikJoint.SetGoal(goal);
-        }
     }
-	
-	// Update is called once per frame
-	void Update ()
+
+    // Update is called once per frame
+    void Update()
     {
-        goal.transform.position = new Vector3(endEffector.transform.position.x, goal.transform.position.y, goal.transform.position.z);
+        goal.transform.position = new Vector3(endEffector.transform.position.x, goal.transform.position.y,
+            goal.transform.position.z);
+
+        magnitude = Vector3.Magnitude(goal.position - endEffector.position);
 
         foreach (var ikJoint in joints)
         {
-            ikJoint.SetEffector(endEffector);
-            ikJoint.SetGoal(goal);
+            ikJoint.RunIK(goal, endEffector);
         }
     }
 }
