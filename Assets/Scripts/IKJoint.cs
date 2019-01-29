@@ -8,43 +8,80 @@ public class IKJoint : MonoBehaviour
     public HingeJoint hing;
 
 
+    public Transform goal;
+    public Transform endEffector;
+
+    public bool isLeg = false;
+
+    private float max;
+    private float min;
+
     [SerializeField] public Mesh Cylinder;
 
 
     void Start()
     {
+        max = hing.limits.max;
+        min = hing.limits.min;
     }
 
     // Update is called once per frame
     void Update()
     {
+        goal.transform.position = new Vector3(endEffector.transform.position.x, goal.transform.position.y,
+            goal.transform.position.z);
+        RunIK();
     }
 
 
-    public void RunIK(Transform goal, Transform endEffector)
+    public void RunIK()
     {
-      
-        var max = hing.limits.max;
-        var min = hing.limits.min;
-        float currentTargetPosition = hing.spring.targetPosition;
+        var theta = CalculateTheta();
+        
+        print(theta);
 
 
-        var position = transform.TransformPoint(hing.anchor);
-        var toGoal = (goal.position - position).normalized;
-        var toEF = (endEffector.position - position).normalized;
+        if (theta>10)
+        {
+            var crossSign = GetSign();
+
+            var jointSpring = new JointSpring()
+            {
+                spring = hing.spring.spring,
+                damper = hing.spring.damper,
+                targetPosition = Mathf.Clamp(crossSign*1.2f + hing.spring.targetPosition, min, max)
+            };
+            hing.spring = jointSpring;
+            theta = CalculateTheta();
+        }
+        
+    }
+
+    private float CalculateTheta()
+    {
+       
+        var toGoal = GetNormalizedDirection(goal.position);
+        var toEF = GetNormalizedDirection(endEffector.position);
         var theta = Mathf.Acos(Vector3.Dot(toGoal, toEF)) * Mathf.Rad2Deg;
 
-        var crossSign = Mathf.Sign(Vector3.Cross(toGoal, toEF).x);
-
-        var jointSpring = new JointSpring()
-        {
-            spring = hing.spring.spring,
-            damper = hing.spring.damper,
-            targetPosition = Mathf.Clamp(-crossSign*0.1f + hing.spring.targetPosition, min, max)
-        };
-
-        hing.spring = jointSpring;
+        return theta;
     }
+
+    private Vector3 GetNormalizedDirection(Vector3 goal)
+    {
+        var position = transform.TransformPoint(hing.anchor);
+        return (goal - position).normalized;
+    }
+
+    private float GetSign()
+    {
+  
+        var toGoal = GetNormalizedDirection(goal.position);
+        var toEF = GetNormalizedDirection(endEffector.position);
+        var sign = Mathf.Sign(Vector3.Cross(toGoal, toEF).x);
+        return (isLeg)?sign:-sign;
+    }
+
 
     private void OnDrawGizmos()
     {

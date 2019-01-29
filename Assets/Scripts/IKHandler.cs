@@ -1,32 +1,55 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Valve.VR;
+using Valve.VR.InteractionSystem;
 
 public class IKHandler : MonoBehaviour
 {
-    public Transform goal;
-    public Transform endEffector;
+    public SteamVR_Action_Boolean plantAction;
 
-    [SerializeField] public List<IKJoint> joints;
+    public Hand hand;
 
-    private float magnitude;
+    public GameObject prefabToPlant;
 
-    // Use this for initialization
-    void Awake()
+
+    private void OnEnable()
     {
+        if (hand == null)
+            hand = this.GetComponent<Hand>();
+
+        if (plantAction == null)
+        {
+            Debug.LogError("No Ready action assigned");
+            return;
+        }
+
+        plantAction.AddOnChangeListener(OnPlantActionChange, hand.handType);
     }
 
-    // Update is called once per frame
-    void Update()
+    private void OnDisable()
     {
-        goal.transform.position = new Vector3(endEffector.transform.position.x, goal.transform.position.y,
-            goal.transform.position.z);
+        if (plantAction != null)
+            plantAction.RemoveOnChangeListener(OnPlantActionChange, hand.handType);
+    }
 
-        magnitude = Vector3.Magnitude(goal.position - endEffector.position);
-
-        foreach (var ikJoint in joints)
+    private void OnPlantActionChange(SteamVR_Action_In actionIn)
+    {
+        if (plantAction.GetStateDown(hand.handType))
         {
-            ikJoint.RunIK(goal, endEffector);
+            Plant();
         }
     }
+
+    public void Plant()
+    {
+        StartCoroutine(DoPlant());
+    }
+
+    private IEnumerator DoPlant()
+    {
+        
+    }
+
+
 }
