@@ -219,7 +219,6 @@
                   }
                },
                "mode" : "button",
-               "parameters" : {},
                "path" : "/user/hand/left/input/application_menu"
             },
             {
@@ -229,8 +228,35 @@
                   }
                },
                "mode" : "button",
-               "parameters" : {},
                "path" : "/user/hand/right/input/application_menu"
+            },
+            {
+               "inputs" : {},
+               "mode" : "none",
+               "path" : "/user/hand/left/input/trackpad"
+            },
+            {
+               "inputs" : {},
+               "mode" : "none",
+               "path" : "/user/hand/right/input/trackpad"
+            },
+            {
+               "inputs" : {
+                  "click" : {
+                     "output" : "/actions/default/in/ready"
+                  }
+               },
+               "mode" : "button",
+               "path" : "/user/hand/left/input/trigger"
+            },
+            {
+               "inputs" : {
+                  "click" : {
+                     "output" : "/actions/default/in/ready"
+                  }
+               },
+               "mode" : "button",
+               "path" : "/user/hand/right/input/trigger"
             }
          ]
       },
@@ -421,8 +447,8 @@
       }
    },
    "controller_type" : "vive_controller",
-   "description" : "",
-   "name" : "vive_controller",
+   "description" : "Amir changed it",
+   "name" : "Tiger_Controller",
    "options" : {},
    "simulated_actions" : []
 }

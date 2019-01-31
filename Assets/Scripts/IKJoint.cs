@@ -7,6 +7,7 @@ public class IKJoint : MonoBehaviour
 {
     public HingeJoint hing;
 
+    
 
     public Transform goal;
     public Transform endEffector;
@@ -15,6 +16,7 @@ public class IKJoint : MonoBehaviour
 
     private float max;
     private float min;
+    private Vector3 initPosition;
 
     [SerializeField] public Mesh Cylinder;
 
@@ -23,24 +25,23 @@ public class IKJoint : MonoBehaviour
     {
         max = hing.limits.max;
         min = hing.limits.min;
+
+        
+
     }
 
     // Update is called once per frame
     void Update()
-    {
-        goal.transform.position = new Vector3(endEffector.transform.position.x, goal.transform.position.y,
-            goal.transform.position.z);
+    { 
         RunIK();
     }
+
+    
 
 
     public void RunIK()
     {
         var theta = CalculateTheta();
-        
-        print(theta);
-
-
         if (theta>10)
         {
             var crossSign = GetSign();
