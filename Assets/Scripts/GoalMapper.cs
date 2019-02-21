@@ -20,6 +20,7 @@ public class GoalMapper : MonoBehaviour {
     // Use this for initialization
     void Start ()
     {
+        //transform.position = endEffector.position;
         initPosition = endEffector.position - tigerRoot.GetRootTransform(); //transform.position;
     }
 	
@@ -40,10 +41,11 @@ public class GoalMapper : MonoBehaviour {
             translate.x = 0;
             translate.y *= -1;
         }
-
+       
+        
         transform.position = tigerRoot.GetRootTransform() + initPosition + translate;
 
-
+       
 
 
         //if (input != null)
