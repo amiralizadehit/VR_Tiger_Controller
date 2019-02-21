@@ -34,5 +34,7 @@ namespace Valve.VR
         public Valve.VR.SteamVR_Action_Single Squeeze;
         
         public Valve.VR.SteamVR_Action_Boolean Ready;
+        
+        public Valve.VR.SteamVR_Action_Boolean Restart;
     }
 }

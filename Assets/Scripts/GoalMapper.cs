@@ -12,10 +12,15 @@ public class GoalMapper : MonoBehaviour {
 
     public string key;
 
+    public Vector3 scaleDown = new Vector3(1,-1,1);
+
+    private Vector3 old_pos = Vector3.zero;
+
     private Vector3 initPosition;
     // Use this for initialization
-    void Start () {
-        initPosition = transform.position;
+    void Start ()
+    {
+        initPosition = endEffector.position - tigerRoot.GetRootTransform(); //transform.position;
     }
 	
 	// Update is called once per frame
@@ -23,26 +28,47 @@ public class GoalMapper : MonoBehaviour {
     {
         UpdateGoal();
     }
+
+
     private void UpdateGoal()
     {
+        Vector3 translate = Vector3.zero;
+
         if (input != null)
         {
-
-
-            Vector3 translate = input.GetTranslate(key);
-
-            var offset = tigerRoot.GetRootTransform().z;
-
-            if (translate != Vector3.zero)
-            {
-                translate *= 1.5f;
-               transform.position = new Vector3(endEffector.position.x, initPosition.y + translate.y, initPosition.z + translate.x + offset);
-
-
-                //goal.transform.Translate(translate);
-            }
-
+            translate = input.GetTranslate(key);
+            translate.x = 0;
+            translate.y *= -1;
         }
+
+        transform.position = tigerRoot.GetRootTransform() + initPosition + translate;
+
+
+
+
+        //if (input != null)
+        //{
+
+
+        //    Vector3 translate = input.GetTranslate(key);
+        //    var offset = tigerRoot.GetRootTransform();
+        //    old_pos = endEffector.position;
+
+
+        //    if (translate != Vector3.zero)
+        //    {
+        //        translate *= 1.5f;
+        //        if (key == "rHand")
+        //            Debug.Log(translate);
+        //        Vector3 npos = 0.5f * old_pos + 0.5f * new Vector3(endEffector.position.x, initPosition.y + translate.y, initPosition.z + translate.z+offset.z);
+        //        npos.x = endEffector.position.x;
+        //        transform.position = new Vector3(endEffector.position.x, initPosition.y + translate.y*scaleDown+ endEffector.position.y , initPosition.z + translate.x * scaleDown + offset.z );
+
+
+        //        //goal.transform.Translate(translate);
+        //    }
+
+        //}
 
 
     }

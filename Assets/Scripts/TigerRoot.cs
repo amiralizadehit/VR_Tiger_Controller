@@ -15,6 +15,6 @@ public class TigerRoot : MonoBehaviour
 	// Update is called once per frame
     public Vector3 GetRootTransform()
     {
-        return transform.position - initPosition;
+        return transform.position; // - initPosition;
     }
 }

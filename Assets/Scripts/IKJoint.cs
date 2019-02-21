@@ -31,26 +31,26 @@ public class IKJoint : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    private int counter = 0;
+    void FixedUpdate()
     { 
         RunIK();
+
     }
-
     
-
-
     public void RunIK()
     {
         var theta = CalculateTheta();
-        if (theta>10)
+        if (theta>1)
         {
             var crossSign = GetSign();
-
+            var nTarget = hing.spring.targetPosition + crossSign * theta;
+            float alpha = 0.25f;
             var jointSpring = new JointSpring()
             {
                 spring = hing.spring.spring,
                 damper = hing.spring.damper,
-                targetPosition = Mathf.Clamp(crossSign*1.2f + hing.spring.targetPosition, min, max)
+                targetPosition = Mathf.Clamp(nTarget * alpha + hing.spring.targetPosition * (1f - alpha), min, max)//1.2
             };
             hing.spring = jointSpring;
             theta = CalculateTheta();
