@@ -60,7 +60,7 @@ public class ModelController : MonoBehaviour
 
     void Awake()
     {
-        Time.fixedDeltaTime = 0.01f;
+        Time.fixedDeltaTime = 0.001f;
         
         ModelInit();
     }

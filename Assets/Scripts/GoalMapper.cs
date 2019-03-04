@@ -21,7 +21,7 @@ public class GoalMapper : MonoBehaviour {
     void Start ()
     {
         //transform.position = endEffector.position;
-        initPosition = endEffector.position - tigerRoot.GetRootTransform(); //transform.position;
+        initPosition = transform.localPosition; //endEffector.position - tigerRoot.GetRootTransform(); //transform.position;
     }
 	
 	// Update is called once per frame
@@ -41,9 +41,9 @@ public class GoalMapper : MonoBehaviour {
             translate.x = 0;
             translate.y *= -1;
         }
-       
-        
-        transform.position = tigerRoot.GetRootTransform() + initPosition + translate;
+
+
+        transform.localPosition = initPosition + translate;
 
        
 
