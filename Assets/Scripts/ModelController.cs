@@ -82,13 +82,18 @@ public class ModelController : MonoBehaviour
 
         for (int i = 0; i < bones.Length; i++)
         {
-            JointSpring spring = new JointSpring()
+            var hingJoint = bones[i].GetComponent<HingeJoint>();
+            if (hingJoint!=null)
             {
-                spring = (i==0)?modelSpring/2:modelSpring,
-                damper = modelDamper,
-                targetPosition = (useCustomValues)?parts[i]:bones[i].GetComponent<HingeJoint>().spring.targetPosition
-            };
-            bones[i].GetComponent<HingeJoint>().spring = spring;
+
+                JointSpring spring = new JointSpring()
+                {
+                    spring = (i==0)?modelSpring/2:modelSpring,
+                    damper = modelDamper,
+                    targetPosition = (useCustomValues)?parts[i]:bones[i].GetComponent<HingeJoint>().spring.targetPosition
+                };
+                bones[i].GetComponent<HingeJoint>().spring = spring;
+            }
 
             var capsuleCollider = bones[i].GetComponent<CapsuleCollider>();
             if(capsuleCollider != null) //Capsule Collider
@@ -145,19 +150,24 @@ public class ModelController : MonoBehaviour
         float height;
         foreach (var t in bones)
         {
-            if (t.GetComponent<CapsuleCollider>() != null)
+            var collider = t.GetComponent<CapsuleCollider>();
+            var rigidBody = t.GetComponent<Rigidbody>();
+            if (rigidBody!=null)
             {
-                radius = t.GetComponent<CapsuleCollider>().radius;
-                height = t.GetComponent<CapsuleCollider>().height;
+                if (collider!=null)
+                {
+                    radius = t.GetComponent<CapsuleCollider>().radius;
+                    height = t.GetComponent<CapsuleCollider>().height;
 
-                t.GetComponent<Rigidbody>().mass =
-                    totalMass * (float)(Math.PI * Math.Pow(radius, 2) * (4f / 3f * radius + height)) / totalVolume;
-            }
-            else
-            {
-                var size = t.GetComponent<BoxCollider>().size;
-                /*t.GetComponent<Rigidbody>().mass =
+                    t.GetComponent<Rigidbody>().mass =
+                        totalMass * (float)(Math.PI * Math.Pow(radius, 2) * (4f / 3f * radius + height)) / totalVolume;
+                }
+                else
+                {
+                    var size = t.GetComponent<BoxCollider>().size;
+                    /*t.GetComponent<Rigidbody>().mass =
                     totalMass * size.x*size.y*size.z / totalVolume;*/
+                }
             }
         }
 

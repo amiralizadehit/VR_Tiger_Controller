@@ -64,8 +64,6 @@ public class IKJoint : MonoBehaviour
             hing.motor = jointMotor;
             hing.useSpring = false;
             hing.useMotor = true;
-           // hing.useLimits = false;
-            //hing.spring = jointSpring;
             theta = CalculateTheta();
         }
         
