@@ -140,19 +140,19 @@ public class VRInput : MonoBehaviour
 
                 case "rHand":
                     result = RightHand.transform.position - initPositions[tracker];
-                    initPositions[tracker] = RightHand.transform.position;
+                    //initPositions[tracker] = RightHand.transform.position;
                     break;
                 case "lHand":
                     result = LeftHand.transform.position - initPositions[tracker];
-                    initPositions[tracker] = LeftHand.transform.position;
+                    //initPositions[tracker] = LeftHand.transform.position;
                     break;
                 case "rFoot":
                     result = RightFoot.transform.position - initPositions[tracker];
-                    initPositions[tracker] = RightFoot.transform.position;
+                    //initPositions[tracker] = RightFoot.transform.position;
                     break;
                 case "lFoot":
                     result = LeftFoot.transform.position - initPositions[tracker];
-                    initPositions[tracker] = LeftFoot.transform.position;
+                    //initPositions[tracker] = LeftFoot.transform.position;
                     break;
 
             }

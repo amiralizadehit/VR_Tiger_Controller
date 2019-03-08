@@ -17,15 +17,17 @@ public class GoalMapper : MonoBehaviour {
 
     private Vector3 initPosition;
 
+
     void Start ()
     {
         
         //initPosition = transform.localPosition;
-        initPosition = transform.position;
+        initPosition = tigerRoot.transform.InverseTransformPoint(transform.position);
+ 
     }
-	
 
-	void Update ()
+
+    void Update ()
     {
         UpdateGoal();
     }
@@ -50,14 +52,17 @@ public class GoalMapper : MonoBehaviour {
             (gameObject.tag=="IKGoal")
                 ?Mathf.Clamp(initPosition.z+VRTranslate.y, tigerRoot.transform.localPosition.z+tuningParameter,Mathf.Infinity):initPosition.z+VRTranslate.y);*/
 
-        Vector3 newPos = new Vector3(transform.position.x,transform.position.y - VRTranslate.y,transform.position.z + VRTranslate.z);
+        //We want the IK target balls to move relative to the tiger body when the user moves his/her hands and feet relative to his/her body
+        //Thus, we compute and clamp the target positions in the tiger's root coordinates
+        //in the tiger root coordinates, z-axis points down and x-axis points backward
+        Vector3 newPos = new Vector3(initPosition.x - VRTranslate.z, initPosition.y, initPosition.z + VRTranslate.y );
 
-        if (gameObject.tag == "IKGoal")
-        {
-            if(tigerRoot.transform.position.y>endEffector.position.y+tuningParameter)
-                newPos.y = Mathf.Clamp(newPos.y, -Mathf.Infinity, tigerRoot.transform.position.y - tuningParameter);
-        }
-
+        //Clamp the vertical position so that the end effector does not try to break the joint limits
+        newPos.z = Mathf.Clamp(newPos.z, tuningParameter, Mathf.Infinity);
+        //Transform back to world space
+        newPos = tigerRoot.transform.TransformPoint(newPos);
         transform.position = newPos;
+        //Debug.Log(VRTranslate);
+
     }
 }
