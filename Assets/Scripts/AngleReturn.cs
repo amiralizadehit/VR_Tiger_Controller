@@ -33,15 +33,15 @@ public class AngleReturn : MonoBehaviour
     {
         for (int i = 0; i < Bones.Count - 1; i++)
         {
+            //current vector
             Vector3 newVector = Bones[i + 1].position - Bones[i].position;
-            //Vector3 toEF = endEffector.position - Bones[i].position;
-
-            //Here we store the angle which init vector makes with the current vector (after IK update)
-
-            //we should also multiply it by the sign of their cross product in x axis to know when the angle is negative and when it's positive.
 
 
             var t = (isLeg) ? -1 : 1; //rotation sign is different for legs and hands
+
+
+            //Here we store the angle which init vector makes with the current vector (after IK update)
+            //we should also multiply it by the sign of their cross product in x axis to know when the angle is negative and when it's positive.
 
             Angles[i] = Vector3.Angle(InitialVectors[i],
                             newVector) * Mathf.Sign(Vector3.Cross(InitialVectors[i], newVector).x) * t;
@@ -49,7 +49,6 @@ public class AngleReturn : MonoBehaviour
             //we should also take parent rotation into consideration,
             //hence, for each joint, we should subtract the rotation of all the joints above that to get its own pure rotation.
 
-            if (i == 0) continue; // if it's not the root itself
             float parentValues = 0;
             for (var j = 0; j < i; j++)
             {
@@ -60,8 +59,7 @@ public class AngleReturn : MonoBehaviour
         }
 
 
-        // Debug.Log("Angle 0 :"+Angles[0]);
-        Debug.Log("Angle 1 :" + Angles[1]);
+        
     }
 
     public float[] GetAngles()

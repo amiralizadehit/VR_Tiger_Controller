@@ -42,8 +42,6 @@ public class GoalMapper : MonoBehaviour {
             VRTranslate = input.GetTranslate(key);
         }
 
-
-
         // transform.localPosition = initPosition + new Vector3(VRTranslate.z,0,VRTranslate.y);
 
         /*transform.localPosition = new Vector3
